@@ -13,7 +13,7 @@ var codingLanguage string = "GO"
 var (
 	sport        string = "Football"
 	position     string = "Quarterback"
-	playerName   string = "Jimmy Garappolo"
+	playerName   string = "Jimmy Garoppolo"
 	playerNumber int    = 10
 )
 
@@ -28,7 +28,7 @@ func main() {
 	var lastName string = "Dever"
 	var j float32 = 23
 	//3
-	//implicit declaration
+	//inferred declaration
 	//letting go determine what datatype it is based on the value you're assigning
 	i := 69
 	//using the above syntax if you wanted to let GO know you want it to be a float32 instead of it being inferred as as an int, you would add a "." at the end
@@ -50,9 +50,12 @@ func main() {
 
 	//we're assigning a the variable b to take a float32 datatype
 	//then we're assigning the value of be to a wrapped around a float32 conversion function
-	var b string
-	b = strconv.Itoa(a)
+	var b float32
+	b = float32(a)
 	fmt.Printf("%v, %T\n", b, b)
 	//If you tried to use this same logic converting an int to a string you would need the "strconv"(string conversion) package.
 	//Otherwise you would get a character tied to that unicode character
+	var c string
+	c = strconv.Itoa(a)
+	fmt.Printf("%v, %T\n", c, c)
 }
