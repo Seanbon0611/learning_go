@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-//Embedding Examples refer to line 118
+//Embedding Examples refer to line 128
 type User struct {
 	Username string `required max:"10"` //sets that a user must have a username and can be a max of 10 characters
 	isAdmin  bool
