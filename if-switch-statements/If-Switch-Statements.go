@@ -67,14 +67,35 @@ func main() {
 	//Tagless switch statement
 	//He we're setting a variable, the switch statement is looking at the cases as there are no tags and determining which to return based on the conditionals in the cases
 	//In GO the break keyword is implied and it will return the first one once a condition has been met unline other languages
+
+	//In the case you do want you cases to fall through to the next case instead of stopping once a conditon has been met
+	//we use the fallthrough syntax
 	i := 10
 
 	switch {
 	case i <= 10:
 		fmt.Println("less than or equal to 10")
+		fallthrough //even though condition has been met, will still run the case under as long as condition has been met
 	case i <= 20:
 		fmt.Println("less than or equal to 20")
 	default:
 		fmt.Println("greater than 20")
+	}
+
+	//TYPE SWITCH
+	var j interface{} = 1 //j is set to type interface which can take any type
+	switch j.(type) {     //switch statement to check the type of j, once the condition has been met it will print the line
+	case int:
+		fmt.Println("j is an int")
+		break
+		fmt.Println("this isn't going to show becasue of the break!")
+	case float64:
+		fmt.Println("j is an float64")
+	case string:
+		fmt.Println("j is a string")
+	case bool:
+		fmt.Println("j is a boolean")
+	default:
+		fmt.Println("j is a different data type")
 	}
 }
