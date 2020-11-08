@@ -73,7 +73,7 @@ func main() {
 	//MAKE FUNCTION
 	/*
 		Takes 2 or 3 arguments
-		the first arugment is the tpye of object you want to create, the 2nd argument is the length of the slice, the 3rd argument is the capacity
+		the first arugment is the type of object you want to create, the 2nd argument is the length of the slice, the 3rd argument is the capacity
 		why? Because unlike arrays, slices don't have to have a fixed size, we can add or remove elements from them.
 	*/
 	//When creating a slice, everything is getting set to a '0' value.
@@ -95,14 +95,17 @@ func main() {
 	o := append(n, 6) //adds to the end of a slice
 	p := n[1:]        //shifts a slice(remove first element)
 	q := n[:len(n)-1] //pops the last element in a slice
+	//Unshift(Adds element to the front of the slice)
+	r := append([]int{0}, n...) //creating a new slice containing the value at the 0 index and using the spread operator to add to that newly created slice with the rest of the elements tha are within the original slice
 	fmt.Println(o)
 	fmt.Println(p)
 	fmt.Println(q)
+	fmt.Println(r)
 	/*to remove elements in the middle of a slice, we have to concat two slices together
 	the first slice goes up to the point of the element we want to remove
 	the second slice is going to hold the elemts after the elemnt we want to remove
 	we then use the spread operator "..." to spread thin gs out to work with the append function
 	*/
-	r := append(n[:2], n[3:]...)
-	fmt.Println(r)
+	s := append(n[:2], n[3:]...)
+	fmt.Println(s)
 }
