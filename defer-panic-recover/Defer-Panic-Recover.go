@@ -57,3 +57,7 @@ func g(i int) {
 	fmt.Println("Printing in g", i)
 	g(i + 1)
 }
+
+/*
+	The function g takes the int i, and panics if i is greater than 3, or else it calls itself with the argument i+1. The function main defers a function that calls recover and prints the recovered value (if it is non-nil).
+*/
