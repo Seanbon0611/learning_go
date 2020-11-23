@@ -130,8 +130,10 @@ func main() {
 		As go is a functional language and cannot use inheritance like OOP languages do
 		Go uses something like inheritance called composition through embedding.
 	*/
+
+	aUser := User{Username: "AspiringProgrammer22", isAdmin: false}
 	newUser := Post{
-		User:    User{Username: "AspiringProgrammer22", isAdmin: false},
+		User:    aUser,
 		Title:   "My First Post",
 		Content: "This is my first post!",
 	}
