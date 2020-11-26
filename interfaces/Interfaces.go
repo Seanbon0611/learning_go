@@ -88,6 +88,46 @@ func main() {
 	var wc WriterCloser = NewBufferedWriterCloser()
 	wc.Write([]byte("Greetings Everyone, My Name is Sean and i'm a web developer!")) //converts string to a byte slice
 	wc.Close()
+
+	//type conversion
+	bwc := wc.(*BufferWriterCloser) //we get the object then use the "." operator
+	fmt.Println(bwc)                //instead of the writer closer, becomes a bufferwritercloser
+
+	r, ok := wc.(*BufferWriterCloser) //we get the object then use the "." operator
+	if ok {
+		fmt.Println(r)
+	} else {
+		fmt.Println("Conversion Failed")
+	}
+
+	//Empty Interface
+	//An in terface that is defined on the fly without any methods on it
+	//Everything can be cast into an object that has no methods on it, even Primitives
+	var myObj interface{} = NewBufferedWriterCloser()
+	fmt.Println(myObj)
+
+	//Interface Type Switch
+	var i interface{} = 0
+	switch i.(type) {
+	case int:
+		fmt.Println("i is an Integer")
+	case string:
+		fmt.Println("i is a String")
+	default:
+		fmt.Println("i is an unknown type")
+	}
+	/*
+		Rules & Best Practices with Interfaces
+		-----------------------------------------
+		- Use many small interfaces
+			it's better to have many smaller interfaces than one big one becas\use single method interfaces are more powerful and flexible
+				ex: io.Writer, io.Reader, interface{}
+		- Dont export interfaces for types that will be consumed
+			if you don't need to export the interface yourself, then don't
+		- Do export interfaces for types that will be used by package
+			if you're going to be pulling a value in, accept an interface instead of a concrete type because go has implicit implementation
+		- Design functions and methods to reciveve interfaces whenever possible
+	*/
 }
 
 type Incrementer interface {
