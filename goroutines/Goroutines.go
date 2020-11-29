@@ -40,10 +40,13 @@ func main() {
 	//once the goroutine is done we exit the application by using the Wait method
 	wg.Wait()
 
-	runtime.GOMAXPROCS(100)
+	runtime.GOMAXPROCS(100) //sets the maximum amount of threads
 	for i := 0; i < 10; i++ {
 		wg.Add(2)
+		//we are locking before each goroutine and then unlocking within the goroutine itself
+		m.RLock() //RLock locks rw for reading
 		go sayHello()
+		m.Lock() //Write lock
 		go increment()
 	}
 	wg.Wait()
@@ -52,12 +55,14 @@ func main() {
 
 //SYNCHRONIZING MULTIPLE GOROUTINES OUTSIDE OF MAIN FUNC
 
-func increment() {
-	counter++
+func sayHello() {
+	fmt.Printf("Hello! %v\n", counter)
+	m.RUnlock() //unlocks the Rlock
 	wg.Done()
 }
 
-func sayHello() {
-	fmt.Printf("Hello! %v\n", counter)
+func increment() {
+	counter++
+	m.Unlock() //Unlocks the write lock
 	wg.Done()
 }
