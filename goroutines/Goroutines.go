@@ -66,3 +66,14 @@ func increment() {
 	m.Unlock() //Unlocks the write lock
 	wg.Done()
 }
+
+/*
+BEST PRACTICES
+-----------------------
+Don't create goroutines in libraries
+	-let consumers control concurrency, keep things siple and single threaded
+When creating a goroutine, know how it will end
+	-avoid subtle memory leaks
+Check for race condition at compile time, you can do so by adding a -race flag to your go run
+ex: go run -race main.go
+*/
