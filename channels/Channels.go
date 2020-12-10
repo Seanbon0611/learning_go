@@ -44,4 +44,18 @@ func main() {
 		}()
 	}
 	wg.Wait()
+
+	//improved dataflow with goroutine
+	ch_3 := make(chan int)
+	wg.Add(2)
+	go func(ch <-chan int) { //setting a recieve only channel as a parameter for this function
+		i := <-ch
+		fmt.Println(i)
+		wg.Done()
+	}(ch_3)
+	go func(ch chan<- int) { //sending data into the channel with a channel set as the parameter and that the channel can only take in an int
+		ch <- 11
+		wg.Done()
+	}(ch_3)
+	wg.Wait()
 }
