@@ -82,10 +82,20 @@ func main() {
 	wg.Wait()
 
 	//Select Statements
+
+	//gorotuine that runs the logger func
 	go logger()
+
+	//defer function that will close the log channel at the end of the main funcs execution
+	defer func() {
+		close(logCh)
+	}()
+	//senders to the log channel
 	logCh <- logEntry{time.Now(), logInfo, "App is starting"}
 	logCh <- logEntry{time.Now(), logInfo, "App is shutting down"}
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond) //here because the the main func ends before the goroutine can fire off
+	//inititalizing the struct to be empty
+	doneCh <- struct{}{}
 }
 
 const (
@@ -94,16 +104,29 @@ const (
 	logError   = "ERROR"
 )
 
+//struct that creates new instances of logEntries that hold the time, the severity of the log, and the message associated with that log
 type logEntry struct {
 	time     time.Time
 	severity string
 	message  string
 }
 
+//creates the channel to hold our logs
 var logCh = make(chan logEntry, 50)
+var doneCh = make(chan struct{}) //signal only channel, no memory allocation in sending the message and lets the reciving side know that the message was sent
 
+//function that acts as the reciever and will loop through the log channel and print the time, the severity and message associated with that log
 func logger() {
-	for entry := range logCh {
-		fmt.Printf("%v - [%v]%v\n", entry.time.Format("2006-01-02T15:05:05"), entry.severity, entry.message)
+	//infinite loop
+	for {
+		//select statement acts like a switch statement but for channels
+		select {
+		//if there is an entry within the logchannel print it
+		case entry := <-logCh:
+			fmt.Printf("%v - [%v]%v\n", entry.time.Format("2006-01-02T15:05:05"), entry.severity, entry.message)
+		//if there is a message from the doneCh then break out of the for loop
+		case <-doneCh:
+			break
+		}
 	}
 }
