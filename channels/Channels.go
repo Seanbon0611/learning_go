@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 var wg = sync.WaitGroup{}
@@ -45,7 +46,7 @@ func main() {
 	}
 	wg.Wait()
 
-	//improved dataflow with goroutine
+	//Polymorphic Channels
 	ch_3 := make(chan int)
 	wg.Add(2)
 	go func(ch <-chan int) { //setting a recieve only channel as a parameter for this function
@@ -58,4 +59,51 @@ func main() {
 		wg.Done()
 	}(ch_3)
 	wg.Wait()
+
+	//Buffered Channels
+	/*
+		What buffers does is it when your sender or reciever needs a little time to process and prevents it from blocking the other side because of the delay
+	*/
+	ch_4 := make(chan int, 50) //the 2nd parameter here is the buffer, it tells go to create a channel that has an internal datastore that can store 50 integers
+	wg.Add(2)
+	go func(ch <-chan int) {
+		//ranging over channel to pull the single value from the channel each
+		for i := range ch {
+			fmt.Println(i)
+		}
+		wg.Done()
+	}(ch_4)
+	go func(ch chan<- int) {
+		ch <- 22
+		ch <- 18
+		close(ch_4) //we are using the close function to prevent a deadlock, closing the channel signifies that once the data is pushed into the channel that there will be no more data to be pushed and we are closing the channel so the range knows when the channel ends
+		wg.Done()
+	}(ch_4)
+	wg.Wait()
+
+	//Select Statements
+	go logger()
+	logCh <- logEntry{time.Now(), logInfo, "App is starting"}
+	logCh <- logEntry{time.Now(), logInfo, "App is shutting down"}
+	time.Sleep(100 * time.Millisecond)
+}
+
+const (
+	logInfo    = "INFO"
+	logWarning = "WARNING"
+	logError   = "ERROR"
+)
+
+type logEntry struct {
+	time     time.Time
+	severity string
+	message  string
+}
+
+var logCh = make(chan logEntry, 50)
+
+func logger() {
+	for entry := range logCh {
+		fmt.Printf("%v - [%v]%v\n", entry.time.Format("2006-01-02T15:05:05"), entry.severity, entry.message)
+	}
 }
