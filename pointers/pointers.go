@@ -29,9 +29,9 @@ func main() {
 		with the new function, we are able to do the same to initialize a variable to the pointer of an object
 	*/
 	var names *myStruct
-	names = new(myStruct)  //with the syntax you can initialize with values
+	names = new(myStruct)  //with the syntax new you can initialize with values
 	(*names).name = "Sean" //You need the att parenthases inorder to properly use the defreferencing operator as it has more presidence over the '.' operator
-	fmt.Println((*names).name)
+	fmt.Println((*names))
 	/*
 		you don't need all this, syntactic sugar version:
 		var names *myStruct
